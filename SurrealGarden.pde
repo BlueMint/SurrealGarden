@@ -104,8 +104,7 @@ void interactionUpdate() {
     strokeWeight(3);
     fill(0);
     ellipse(map(currentPos.x, 0, width, width*-0.2, width*1.2), map(currentPos.y, 0, height, height*-0.2, height*1.2), 10, 10);
-    println("X: " + map(currentPos.x, 0, width, width*-1.2, width*1.2) + " Y: " + map(currentPos.y, 0, height, height*-1.2, height*1.2));
-    if (mouseY > height-30 && timeGrassPlayedLast < sky.mills - 2000) {
+    if (map(currentPos.y, 0, height, height*-1.2, height*1.2) > height-200 && timeGrassPlayedLast < sky.mills - 2000) {
       playSound("grass");
       timeGrassPlayedLast = sky.mills;
     }

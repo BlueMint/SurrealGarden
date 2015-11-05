@@ -13,6 +13,8 @@ class sky {
   double hour = 0;//30 hours in a day, 1 hour = 1 sec
   float mills;
 
+  boolean newDay;
+
   String season = "summer";
 
   moon moon;
@@ -25,6 +27,8 @@ class sky {
   void update() {
     mills = millis();
     hour = (mills/1000) % dayLength;
+    
+    print("yeah");
     if (season == "summer") {
       if (hour > 0 && hour <= 6)
       {
@@ -42,28 +46,49 @@ class sky {
       { 
         setGradient(summerAfternoon, summerNight, 6, 24, hour);
         moon.displayMoon();
+        newDay = false;
       }
     }
     if (season == "winter") {
-      if (hour > 0 && hour <= 6) setGradient(winterNight, winterMorning, 6, 0, hour);
-      else if (hour > 6 && hour <= 15) setGradient(winterMorning, winterMidday, 9, 6, hour);
-      else if (hour > 15 && hour <= 24) setGradient(winterMidday, winterAfternoon, 9, 15, hour);
-      else if (hour > 24 && hour <= 31) setGradient(winterAfternoon, winterNight, 6, 24, hour);
+      if (hour > 0 && hour <= 6) {
+        setGradient(winterNight, winterMorning, 6, 0, hour);
+        moon.displayMoon();
+      } else if (hour > 6 && hour <= 15) {
+        setGradient(winterMorning, winterMidday, 9, 6, hour);
+        moon.displaySun();
+      } else if (hour > 15 && hour <= 24) {
+        setGradient(winterMidday, winterAfternoon, 9, 15, hour);
+        moon.displaySun();
+      } else if (hour > 24 && hour <= 31) {
+        setGradient(winterAfternoon, winterNight, 6, 24, hour);
+        moon.displayMoon();
+        newDay = false;
+      }
     }
   }
 
   void midnightReset() {
     if (hour > 0 && hour < 1) {
-      soundPlayed = false;
+      if (newDay == false) {
+        if (random(1) < .5) {
+          if (season == "summer") {
+            season = "winter";
+          } else {
+            season = "summer";
+          }
+        }
+        newDay = true;
+        soundPlayed = false;
+      }
     }
   }
-  
+
   void soundUpdate() {
-  if (hour > 5 && hour < 6 && soundPlayed == false) {
-    playSound("rooster");
-    soundPlayed = true;
+    if (hour > 5 && hour < 6 && soundPlayed == false) {
+      playSound("rooster");
+      soundPlayed = true;
+    }
   }
-}
 
   void setGradient(color c1, color c2, float cycleLen, float startTime, double hour) {
     noFill();
