@@ -24,13 +24,14 @@ void setup() {
 void draw() {
   sky.update();
   stroke(255, 0, 255);
-  line(width/2, height/2, width/2+wind.x*10, height/2+wind.y*10);
+  line(width/2, height/2, width/2+wind.x*4, height/2+wind.y*4);
   stroke(0);
   //wind.update();
   treeUpdate(tree1);
   treeUpdate(tree2);
   insectPS.update();
   windUpdate();
+  interactionUpdate();
 
   for (grass grass : grasses) {
     grassUpdate(grass);
@@ -48,26 +49,48 @@ void grassUpdate(grass currentGrass) {
   currentGrass.display();
 }
 
-PVector getFingerPos() {
+PVector getRightFingerPos() {
   for (Hand hand : leap.getHands ()) {
-    for (Finger finger : hand.getFingers ()) {
-      if (finger.getType() == 1) {
-        return finger.getPosition();
+    if (hand.isRight()) {
+      for (Finger finger : hand.getFingers ()) {
+        if (finger.getType() == 1) {
+          return finger.getPosition();
+        }
       }
     }
-  }
+  } 
   return null;
 }
 
-void windUpdate(){
-  PVector currentPos = getFingerPos();
-  if (currentPos != null){
-    wind.x = map(getFingerPos().x, 0, width, -10, 10);
-    wind.y = map(getFingerPos().y, 0, height, -10, 10);
-//    if (getFingerPos().x < width/2 && wind.mag()<50) wind.x -= 1;
-//    else if (getFingerPos().x > width/2 && wind.mag()>1) wind.x += 1;
-    //if (getFingerPos().y < height/2) wind.rotate(radians(-10));
-    //else if (getFingerPos().y > height/2) wind.rotate(radians(10));
+PVector getLeftFingerPos() {
+  for (Hand hand : leap.getHands ()) {
+    if (hand.isLeft()) {
+      for (Finger finger : hand.getFingers ()) {
+        if (finger.getType() == 1) {
+          return finger.getPosition();
+        }
+      }
+    }
+  } 
+  return null;
+}
+
+void windUpdate() {
+  PVector currentPos = getRightFingerPos();
+  if (currentPos != null) {
+    wind.x = map(currentPos.x, 0, width, -50, 50);
+    wind.y = map(currentPos.y, 0, height, -50, 50);
+  }
+}
+
+void interactionUpdate() {
+  PVector currentPos = getLeftFingerPos();
+  if (currentPos != null) {
+    stroke(0, 0, 0);
+    strokeWeight(3);
+    fill(0);
+    ellipse(map(currentPos.x, 0, width, width*-0.2, width*1.2), map(currentPos.y, 0, height, height*-0.2, height*1.2), 10, 10);
+    println("X: " + map(currentPos.x, 0, width, width*-1.2, width*1.2) + " Y: " + map(currentPos.y, 0, height, height*-1.2, height*1.2));
   }
 }
 

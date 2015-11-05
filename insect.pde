@@ -1,29 +1,21 @@
-class insectParticleSystem
-{
+class insectParticleSystem{
   ArrayList<insect> insects;
   PVector wind;
   float cooldown = 0;
 
-  insectParticleSystem(PVector _w)
-  {
+  insectParticleSystem(PVector _w){
     insects = new ArrayList<insect>();
     wind = _w;
   }
 
-  void addInsect()
-  {
-    if (cooldown < 1)
-    {
+  void addInsect(){
+    if (cooldown < 1){
       insects.add(new insect(wind)); 
-      cooldown = random(5, 15);
-    } else
-    {
-      cooldown--;
-    }
+      cooldown = random(3, 8);
+    } else cooldown--;
   }
 
-  void update()
-  {
+  void update(){
     addInsect();
     for (int i = insects.size ()-1; i >= 0; i--) {
       insect p = insects.get(i);
@@ -67,7 +59,7 @@ class insect
 
   void update()
   {
-    velocity.set(wind.x, wind.y);
+    velocity.set(wind.x/10, wind.y/10);
     location.add(velocity);
     if (opacity < 90 && !decay) {
       opacity += 5;
