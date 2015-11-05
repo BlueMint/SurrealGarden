@@ -20,6 +20,9 @@ LeapMotion leap;
 processing.sound.WhiteNoise noise;
 float timeGrassPlayedLast = -10000;
 boolean soundPlayed = false;
+float timeLastInteracted;
+float timeout = 5000;
+float windoff;
 
 
 void setup() {
@@ -98,6 +101,7 @@ PVector getLeftFingerPos() {
 void windUpdate() {
   PVector currentPos = getRightFingerPos();
   if (currentPos != null) {
+    timeLastInteracted = sky.mills;
     wind.x = map(currentPos.x, 0, width, -50, 50);
     wind.y = map(currentPos.y, 0, height, -50, 50);
   }
@@ -106,6 +110,7 @@ void windUpdate() {
 void interactionUpdate() {
   PVector currentPos = getLeftFingerPos();
   if (currentPos != null) {
+    timeLastInteracted = sky.mills;
     stroke(0, 0, 0);
     strokeWeight(3);
     fill(0);
@@ -115,9 +120,24 @@ void interactionUpdate() {
       timeGrassPlayedLast = sky.mills;
     }
   }
+  if (timeLastInteracted < sky.mills - timeout){
+    windoff = windoff + .01;
+       wind.rotate(radians(((noise(windoff)*40)-20)/10));
+       if(wind.mag() > 50){
+         wind.setMag(wind.mag() - noise(windoff));
+       }
+       else
+       if(wind.mag() < 1){
+         wind.setMag(wind.mag() + noise(windoff));
+       }
+       else{
+         wind.setMag(wind.mag() +(noise(windoff) - wind.mag()/100 -0.25)  );
+       }
+  }
 }
 
 void keyPressed(KeyEvent e) {
+  timeLastInteracted = sky.mills;
   if (key == CODED) {
     if (keyCode == LEFT) {
       wind.rotate(radians(-10));
