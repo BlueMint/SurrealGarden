@@ -27,8 +27,6 @@ class sky {
   void update() {
     mills = millis();
     hour = (mills/1000) % dayLength;
-    
-    print("yeah");
     if (season == "summer") {
       if (hour > 0 && hour <= 6)
       {

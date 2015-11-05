@@ -5,6 +5,8 @@ import ddf.minim.analysis.*;
 import ddf.minim.ugens.*;
 import ddf.minim.effects.*;
 
+import processing.sound.*;
+
 import de.voidplus.leapmotion.*;
 
 Minim minim;
@@ -15,6 +17,7 @@ PVector wind;
 insectParticleSystem insectPS;
 sky sky = new sky();
 LeapMotion leap;
+processing.sound.WhiteNoise noise;
 float timeGrassPlayedLast = -10000;
 boolean soundPlayed = false;
 
@@ -31,6 +34,9 @@ void setup() {
   wind = new PVector(0, 1, 0);
   insectPS = new insectParticleSystem(wind);
   leap = new LeapMotion(this);
+  noise = new processing.sound.WhiteNoise(this);
+  noise.amp(0.0);
+  noise.play();
 }
 
 void draw() {
@@ -38,7 +44,7 @@ void draw() {
   stroke(255, 0, 255);
   line(width/2, height/2, width/2+wind.x*4, height/2+wind.y*4);
   stroke(0);
-  //wind.update();
+  noise.amp(map(abs(wind.x)+abs(wind.y), 0, 50, 0, 0.15));
   treeUpdate(tree1);
   treeUpdate(tree2);
   insectPS.update();
