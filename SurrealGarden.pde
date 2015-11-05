@@ -24,7 +24,7 @@ void setup() {
 void draw() {
   sky.update();
   stroke(255, 0, 255);
-  line(width/2, height/2, width/2+wind.x*5, height/2+wind.y*5);
+  line(width/2, height/2, width/2+wind.x*10, height/2+wind.y*10);
   stroke(0);
   //wind.update();
   treeUpdate(tree1);
@@ -62,10 +62,12 @@ PVector getFingerPos() {
 void windUpdate(){
   PVector currentPos = getFingerPos();
   if (currentPos != null){
-    if (getFingerPos().x < width/2 && wind.mag()<50) wind.x -= 1;
-    else if (getFingerPos().x > width/2 && wind.mag()>1) wind.x += 1;
-    if (getFingerPos().y < height/2) wind.rotate(radians(-10));
-    else if (getFingerPos().y > height/2) wind.rotate(radians(10));
+    wind.x = map(getFingerPos().x, 0, width, -10, 10);
+    wind.y = map(getFingerPos().y, 0, height, -10, 10);
+//    if (getFingerPos().x < width/2 && wind.mag()<50) wind.x -= 1;
+//    else if (getFingerPos().x > width/2 && wind.mag()>1) wind.x += 1;
+    //if (getFingerPos().y < height/2) wind.rotate(radians(-10));
+    //else if (getFingerPos().y > height/2) wind.rotate(radians(10));
   }
 }
 
