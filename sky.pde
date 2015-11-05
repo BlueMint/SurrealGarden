@@ -1,22 +1,22 @@
-class sky{
+class sky {
   color summerMorning = color(100, 150, 100);
   color summerMidday = color(200, 200, 200);
   color summerAfternoon = color(150, 100, 100);
   color summerNight = color(30, 10, 20);
-  
+
   color winterMorning = color(100, 100, 150);
   color winterMidday = color(200, 200, 220);
   color winterAfternoon = color(150, 100, 150);
   color winterNight = color(15, 15, 25);
-  
+
   float dayLength = 30;
   double hour = 0;//30 hours in a day, 1 hour = 1 sec
   float mills;
-  
+
   String season = "summer";
-  
+
   moon moon;
-  
+
   sky()
   {
     moon = new moon();
@@ -30,18 +30,15 @@ class sky{
       {
         setGradient(summerNight, summerMorning, 6, 0, hour);
         moon.displayMoon();
-      }
-      else if (hour > 6 && hour <= 15)
+      } else if (hour > 6 && hour <= 15)
       { 
         setGradient(summerMorning, summerMidday, 9, 6, hour);
         moon.displaySun();
-      }
-      else if (hour > 15 && hour <= 24)
+      } else if (hour > 15 && hour <= 24)
       { 
         setGradient(summerMidday, summerAfternoon, 9, 15, hour);
         moon.displaySun();
-      }
-      else if (hour > 24 && hour <= 31)
+      } else if (hour > 24 && hour <= 31)
       { 
         setGradient(summerAfternoon, summerNight, 6, 24, hour);
         moon.displayMoon();
@@ -54,7 +51,20 @@ class sky{
       else if (hour > 24 && hour <= 31) setGradient(winterAfternoon, winterNight, 6, 24, hour);
     }
   }
+
+  void midnightReset() {
+    if (hour > 0 && hour < 1) {
+      soundPlayed = false;
+    }
+  }
   
+  void soundUpdate() {
+  if (hour > 5 && hour < 6 && soundPlayed == false) {
+    playSound("rooster");
+    soundPlayed = true;
+  }
+}
+
   void setGradient(color c1, color c2, float cycleLen, float startTime, double hour) {
     noFill();
     for (int i = 0; i <= height; i++) {
@@ -65,3 +75,4 @@ class sky{
     }
   }
 }
+

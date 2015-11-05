@@ -1,5 +1,13 @@
+import ddf.minim.spi.*;
+import ddf.minim.signals.*;
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.ugens.*;
+import ddf.minim.effects.*;
+
 import de.voidplus.leapmotion.*;
 
+Minim minim;
 tree tree1;
 tree tree2;
 ArrayList<grass> grasses = new ArrayList<grass>(); //lol at grasses
@@ -7,12 +15,16 @@ PVector wind;
 insectParticleSystem insectPS;
 sky sky = new sky();
 LeapMotion leap;
+float timeGrassPlayedLast = -10000;
+boolean soundPlayed = false;
 
 
 void setup() {
   size(1000, 800);
+  minim = new Minim(this);
   tree1 = new tree(width/2+width/4, height, height/4);
   tree2 = new tree(width/4, height, height/4);
+  playSound("tree");
   for (int i = 0; i < width; i += random (5, 20)) {
     grasses.add(new grass(i, random(5, 50)));
   }
@@ -32,6 +44,8 @@ void draw() {
   insectPS.update();
   windUpdate();
   interactionUpdate();
+  sky.soundUpdate();
+  sky.midnightReset();
 
   for (grass grass : grasses) {
     grassUpdate(grass);
@@ -91,6 +105,10 @@ void interactionUpdate() {
     fill(0);
     ellipse(map(currentPos.x, 0, width, width*-0.2, width*1.2), map(currentPos.y, 0, height, height*-0.2, height*1.2), 10, 10);
     println("X: " + map(currentPos.x, 0, width, width*-1.2, width*1.2) + " Y: " + map(currentPos.y, 0, height, height*-1.2, height*1.2));
+    if (mouseY > height-30 && timeGrassPlayedLast < sky.mills - 2000) {
+      playSound("grass");
+      timeGrassPlayedLast = sky.mills;
+    }
   }
 }
 
@@ -108,6 +126,10 @@ void keyPressed(KeyEvent e) {
     if (keyCode == DOWN && wind.mag()>1) {
       wind.setMag(wind.mag()-1);
     }
+  } else if (key == 'r') {
+    tree1 = new tree(width/2+width/4, height, height/4);
+    tree2 = new tree(width/4, height, height/4);
+    playSound("tree");
   }
 }
 
