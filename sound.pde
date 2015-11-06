@@ -14,3 +14,9 @@ void playSound(String noise) {
   }
 }
 
+void ambience() {
+  AudioPlayer day;
+  day = minim.loadFile("day.mp3");
+  day.loop();
+}
+
