@@ -40,6 +40,7 @@ void setup() {
   noise = new processing.sound.WhiteNoise(this);
   noise.amp(0.0);
   noise.play();
+  ambience();
 }
 
 void draw() {
